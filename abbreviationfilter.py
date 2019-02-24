@@ -1,7 +1,13 @@
 from textblob import TextBlob
 import couchdb
-couch = couchdb.Server('http://admin:62397917@115.146.92.94:5984/')
+
+#connect to couchdb
+couch = couchdb.Server('http://*****:*****@115.146.92.94:5984/')
+
+#connect to specific database
 db = couch['collector2']
+
+#for each document, find the ones that are related to the abbreviation of the four banks and delete them
 for id in db:
     doc = db[id]
     try:
