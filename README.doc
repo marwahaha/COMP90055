@@ -13,9 +13,9 @@ This is the repository for my computing project. Including:
 	ANZFollowerTimeline.java: Used to retrieve historical data of tweets from the followers of @ANZ_AU.
 	CBAFollowerTimeline.java: Used to retrieve historical data of tweets from the followers of @CommBank.
 	NABFollowerTimeline.java: Used to retrieve historical data of tweets from the followers of @NAB.
-	WBCFollowerTimeline.java: Used to retrieve historical data of tweets from the followers of @Westpac.\
+	WBCFollowerTimeline.java: Used to retrieve historical data of tweets from the followers of @Westpac.
         
-   MyTweet.java: In the above java files, tweets are first stored in MyTweet object and then store in couchdb.
+   MyTweet.java: In the above java files, tweets are first stored in MyTweet objects and then stored in couchdb.6
 
    Dependencies:
 	commons-codec-1.10.jar
