@@ -17,10 +17,10 @@ import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.conf.ConfigurationBuilder;
 
-public class NABFollowerTimeline {
-public static void main(String[] args) throws MalformedURLException, TwitterException{
+public class ANZFollowerTimeline {
+    public static void main(String[] args) throws MalformedURLException, TwitterException{
     	
-		//twitter developer account configuration
+	//twitter developer account configuration
     	ConfigurationBuilder cb = new ConfigurationBuilder();
     	cb.setDebugEnabled(true)
     	  .setOAuthConsumerKey("HtdtaV6rL5s62Y70izki*****")
@@ -38,124 +38,123 @@ public static void main(String[] args) throws MalformedURLException, TwitterExce
 				.password("*****")
 				.build();
 		
-		CouchDbInstance dbInstance = new StdCouchDbInstance(httpClient);
-		CouchDbConnector db = dbInstance.createConnector("collector", false);
+	CouchDbInstance dbInstance = new StdCouchDbInstance(httpClient);
+	CouchDbConnector db = dbInstance.createConnector("collector", false);
 		
-		//variables for getting timeline
-		long cursor = -1;
-		IDs NABFollowers;
-		ResponseList<Status> timeLine;
+	//variables for getting timeline
+	long cursor = -1;
+	IDs NABFollowers;
+	ResponseList<Status> timeLine;
 		
-		//set the bound of the search all the way to one year ago
-		Calendar cal = Calendar.getInstance();
-	    cal.add(Calendar.YEAR, -1);
+	//set the bound of the search all the way to one year ago
+	Calendar cal = Calendar.getInstance();
+	cal.add(Calendar.YEAR, -1);
 		
-		do {
-			NABFollowers = twitter.getFollowersIDs("NAB", cursor, 20);
-			long[] NABIDs = NABFollowers.getIDs();
+	//get follower ID lists, 20 per page, one loop get one page 
+	do {			
+		NABFollowers = twitter.getFollowersIDs("NAB", cursor, 20);
+		long[] NABIDs = NABFollowers.getIDs();
 			
-			//get tweets for each of the 20 followers per loop
-			for (int i=0; i<NABIDs.length; i++) {
-				int page = 1;
-				int count = 50;
-				Date collectTime = Calendar.getInstance().getTime();
-				long userID = NABIDs[i];
+		//get tweets for each of the 20 followers per loop
+		for (int i=0; i<NABIDs.length; i++) {
+			int page = 1;
+			int count = 50;
+			Date collectTime = Calendar.getInstance().getTime();
+			long userID = NABIDs[i];
 				
-				//get tweets for the follower, 50 tweets per page, until reaches one year ago			    
-				for (int j=0; cal.getTime().before(collectTime); j++) {
+			//get tweets for the follower, 50 tweets per page, until reaches one year ago			    
+			for (int j=0; cal.getTime().before(collectTime); j++) {
 					
-					Paging paging = new Paging(page, count);
-					try {
-						timeLine = twitter.getUserTimeline(userID, paging);
-					}catch(TwitterException e) {
-						break;
-					}
-					
-					long start = System.currentTimeMillis();
-					
-					for (Status tweet: timeLine) {
-						
-						//check the content
-						String content = tweet.getText();
-		            	Boolean NAB1 = content.contains(" NAB ");
-		            	Boolean NAB2 = content.toLowerCase().contains("national australia bank");
-		            	Boolean NAB3 = content.contains("@NAB");
-		            	Boolean CBA1 = content.contains(" CBA ");
-		            	Boolean CBA2 = content.toLowerCase().contains("commonwealth bank");
-		            	Boolean CBA3 = content.contains("@CommBank ");
-		            	Boolean ANZ1 = content.contains(" ANZ ");
-		            	Boolean ANZ2 = content.toLowerCase().contains("australia and new zealand banking");
-		            	Boolean ANZ3 = content.contains("@ANZ_AU ");
-		            	Boolean WBC1 = content.contains(" WBC ");
-		            	Boolean WBC2 = content.toLowerCase().contains("westpac");
-		            	
-		            	if (NAB1||NAB2|| NAB3|| CBA1|| CBA2|| CBA3|| ANZ1|| ANZ2|| ANZ3|| WBC1|| WBC2) {
-		            		//retrieve useful tweets attributes
-		            		String id = String.valueOf(tweet.getId());
-		            		String user = String.valueOf(tweet.getUser().getScreenName());
-		            		String cont = String.valueOf(tweet.getText());
-		            		String location = String.valueOf(tweet.getUser().getLocation());
-		            		//change time format
-		            		Date tweetTime = tweet.getCreatedAt();
-		                    String[] timeSplit = tweetTime.toString().split(" ");
-		                    String time = timeSplit[5] + " " + timeSplit[1] + " " + timeSplit[2];
-		                    
-		                    Boolean nab = false;
-		                    Boolean cba = false;
-		                    Boolean anz = false;
-		                    Boolean wbc = false;
-		                                        
-		                    if (NAB1||NAB2||NAB3) {
-		                    	nab = true;
-		                    }
-		                    
-		                    if (CBA1||CBA2||CBA3) {
-		                    	cba = true;
-		                    }
-		                    
-		                    if (ANZ1||ANZ2||ANZ3) {
-		                    	anz = true;
-		                    }
-		                    
-		                    if (WBC1||WBC2) {
-		                    	wbc = true;
-		                    }
-		            		
-		            		try {
-		            			//store in couchdb
-		            			MyTweet t1 = new MyTweet(user, cont, location, time, nab, cba, anz, wbc);
-		                		db.create(id, t1);
-		            		}catch(org.ektorp.UpdateConflictException ue) {
-		            			
-		            		}
-		            	}		            	
-					}
-					long end = System.currentTimeMillis();
-					long duration = end - start;
-					
-					//prevent the limitation of Twitter API (180 per 15min)
-					if (duration < 5050) {
-						try {
-							Thread.sleep(5050-duration);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-					int length = timeLine.size();
-					if (length > 0) {
-						collectTime = timeLine.get(length-1).getCreatedAt();
-					}else {
-						break;
-					}
-				
-					
-					page = page + 1;
+				Paging paging = new Paging(page, count);
+				try {
+					timeLine = twitter.getUserTimeline(userID, paging);
+				}catch(TwitterException e) {
+					break;
 				}
+					
+				long start = System.currentTimeMillis();
+					
+				for (Status tweet: timeLine) {
+						
+					//check the content
+					String content = tweet.getText();
+		            		Boolean NAB1 = content.contains(" NAB ");
+		            		Boolean NAB2 = content.toLowerCase().contains("national australia bank");
+		            		Boolean NAB3 = content.contains("@NAB");
+		            		Boolean CBA1 = content.contains(" CBA ");
+		            		Boolean CBA2 = content.toLowerCase().contains("commonwealth bank");
+		            		Boolean CBA3 = content.contains("@CommBank ");
+		            		Boolean ANZ1 = content.contains(" ANZ ");
+		            		Boolean ANZ2 = content.toLowerCase().contains("australia and new zealand banking");
+		            		Boolean ANZ3 = content.contains("@ANZ_AU ");
+		            		Boolean WBC1 = content.contains(" WBC ");
+		            		Boolean WBC2 = content.toLowerCase().contains("westpac");
+		            	
+		            		if (NAB1||NAB2|| NAB3|| CBA1|| CBA2|| CBA3|| ANZ1|| ANZ2|| ANZ3|| WBC1|| WBC2) {
+		            			//retrieve useful tweets attributes
+		            			String id = String.valueOf(tweet.getId());
+		            			String user = String.valueOf(tweet.getUser().getScreenName());
+		            			String cont = String.valueOf(tweet.getText());
+		            			String location = String.valueOf(tweet.getUser().getLocation());
+		            			//change time format
+		            			Date tweetTime = tweet.getCreatedAt();
+		                    		String[] timeSplit = tweetTime.toString().split(" ");
+		                    		String time = timeSplit[5] + " " + timeSplit[1] + " " + timeSplit[2];
+		                    
+		                    		Boolean nab = false;
+		                    		Boolean cba = false;
+		                    		Boolean anz = false;
+		                    		Boolean wbc = false;
+		                                        
+		                    		if (NAB1||NAB2||NAB3) {
+		                    			nab = true;
+		                    		}
+		                    
+		                    		if (CBA1||CBA2||CBA3) {
+		                    			cba = true;
+		                    		}
+		                    
+		                    		if (ANZ1||ANZ2||ANZ3) {
+		                    			anz = true;
+		                    		}
+		                    
+		                    		if (WBC1||WBC2) {
+		                    			wbc = true;
+		                    		}
+		            		
+		            			try {
+		            				//store in couchdb
+		            				MyTweet t1 = new MyTweet(user, cont, location, time, nab, cba, anz, wbc);
+		                			db.create(id, t1);
+		            			}catch(org.ektorp.UpdateConflictException ue) {
+		            			
+		            			}
+		            		}		            	
+				}
+				long end = System.currentTimeMillis();
+				long duration = end - start;
+					
+				//prevent the limitation of Twitter API (180 per 15min)
+				if (duration < 5050) {
+					try {
+						Thread.sleep(5050-duration);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				int length = timeLine.size();
+				if (length > 0) {
+					collectTime = timeLine.get(length-1).getCreatedAt();
+				}else {
+					break;
+				}
+				
+					
+				page = page + 1;
 			}
-		} while ((cursor = NABFollowers.getNextCursor()) != 0);
+		}
+	} while ((cursor = NABFollowers.getNextCursor()) != 0);
 		
-	}
+     }
 }
-
-
