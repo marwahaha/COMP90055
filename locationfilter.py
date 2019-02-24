@@ -1,6 +1,12 @@
 import couchdb
+
+#connect to couchdb
 couch = couchdb.Server('http://*****:*****@115.146.92.94:5984/')
+
+#connect to the specific database
 db = couch['collector']
+
+#standardize location field for each document
 for id in db:
     doc = db[id]
     try:
