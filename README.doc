@@ -6,7 +6,8 @@ This is the repository for my computing project. Including:
        
    Stream Data:  
    	MyFullStream.java: Used to retrieve stream data.  
-	MyStream.java: Used to retrieve partially stream data (only those tweets that has latitude and longitude data). It is used at               first to retrieve stream data but collect just a few tweets and abondoned. Might be used if anyone is interested in.
+	MyStream.java: Used to retrieve partially stream data (only those tweets that has latitude and longitude data). It is used at 
+	   first to retrieve stream data but collect just a few tweets and abondoned. Might be used if anyone is interested in.
 
    Historical Data:
 	ANZFollowerTimeline.java: Used to retrieve historical data of tweets from the followers of @ANZ_AU.
@@ -42,7 +43,8 @@ This is the repository for my computing project. Including:
 	
    sentiment.py: Used to get sentiment score for each tweet including polarity and subjectivity.   
    locationfilter.py: Used to standardize the location field of the tweets into one of the largest 15 cities in Australia.
-   abbreviationfilter.py: Used to find the tweets in Stream Data that are retrieve by abbreviation and delete them because they may not        refer to the four banks.
+   abbreviationfilter.py: Used to find the tweets in Stream Data that are retrieve by abbreviation and delete them because they may not 
+      refer to the four banks.
    
    Dependencies:
         pip install CouchDB
