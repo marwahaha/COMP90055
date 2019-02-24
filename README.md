@@ -6,18 +6,18 @@ This is the repository for my computing project. Including:
        
    Stream Data:
         MyFullStream.java: Used to retrieve stream data.
-	      MyStream.java: Used to retrieve partially stream data (only those tweets that has latitude and longitude data). It is used at               first to retrieve stream data but collect just a few tweets and abondoned. Might be used if anyone is interested in.
+	MyStream.java: Used to retrieve partially stream data (only those tweets that has latitude and longitude data). It is used at               first to retrieve stream data but collect just a few tweets and abondoned. Might be used if anyone is interested in.
 
    Historical Data:
-	      ANZFollowerTimeline.java: Used to retrieve historical data of tweets from the followers of @ANZ_AU.
-	      CBAFollowerTimeline.java: Used to retrieve historical data of tweets from the followers of @CommBank.
-	      NABFollowerTimeline.java: Used to retrieve historical data of tweets from the followers of @NAB.
-	      WBCFollowerTimeline.java: Used to retrieve historical data of tweets from the followers of @Westpac.\
+	ANZFollowerTimeline.java: Used to retrieve historical data of tweets from the followers of @ANZ_AU.
+	CBAFollowerTimeline.java: Used to retrieve historical data of tweets from the followers of @CommBank.
+	NABFollowerTimeline.java: Used to retrieve historical data of tweets from the followers of @NAB.
+	WBCFollowerTimeline.java: Used to retrieve historical data of tweets from the followers of @Westpac.\
         
-	 MyTweet.java: In the above java files, tweets are first stored in MyTweet object and then store in couchdb.
+   MyTweet.java: In the above java files, tweets are first stored in MyTweet object and then store in couchdb.
 
    Dependencies:
-	      commons-codec-1.10.jar
+	commons-codec-1.10.jar
         commons-io-2.0.1.jar
         commons-logging-1.2.jar
         httpclient-4.5.6.jar
