@@ -4,7 +4,7 @@ This is the repository for my computing project. Including:
 
 1. Java files to use Twitter4j to retrieve tweets:
        
-   Stream Data:
+   Stream Data:  
         MyFullStream.java: Used to retrieve stream data.  
 	MyStream.java: Used to retrieve partially stream data (only those tweets that has latitude and longitude data). It is used at               first to retrieve stream data but collect just a few tweets and abondoned. Might be used if anyone is interested in.
 
