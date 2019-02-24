@@ -20,7 +20,7 @@ import twitter4j.conf.ConfigurationBuilder;
 public class ANZFollowerTimeline {
     public static void main(String[] args) throws MalformedURLException, TwitterException{
     	
-		//twitter developer account configuration
+	//twitter developer account configuration
     	ConfigurationBuilder cb = new ConfigurationBuilder();
     	cb.setDebugEnabled(true)
     	  .setOAuthConsumerKey("FCnsAxA5xeV9EdCMWCwu*****")
