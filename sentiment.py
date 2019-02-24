@@ -22,4 +22,4 @@ for id in db:
         db[id] = doc
 
     except KeyError:
-        print("OMG")
+        continue
